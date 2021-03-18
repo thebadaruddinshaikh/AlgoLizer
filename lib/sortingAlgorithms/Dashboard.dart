@@ -12,8 +12,32 @@ class _DashBoardState extends State<DashBoard> {
   List<double> arr = new List(500);
   List<Block> blockList;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fillArr(8, 3);
+  }
+
+  void InsertionSort() async {
+    for (int i = 1; i < currentSliderValue; i++) {
+      if (blockList[i] == null) break;
+      Block key = blockList[i];
+      int j = i - 1;
+      while (j >= 0 && blockList[j].height > key.height) {
+        setState(() {
+          blockList[j + 1] = blockList[j];
+        });
+        await Future.delayed(Duration(microseconds: 5));
+        j--;
+      }
+      blockList[j + 1] = key;
+    }
+    // for (Block b in blockList) print(b.height);
+  }
+
   // Map<String, >
-  void fillArr() {
+  void fillArr(double width, double margin) {
     for (int i = 0; i < arr.length; i++) arr[i] = null;
     var rng = new Random();
     for (int i = 0; i < currentSliderValue; i++) {
@@ -23,12 +47,11 @@ class _DashBoardState extends State<DashBoard> {
       else
         arr[i] = val;
     }
-    blockList = [...arr.map((height) => Block(height))];
+    blockList = [...arr.map((height) => Block(height, width, margin))];
   }
 
   @override
   Widget build(BuildContext context) {
-    fillArr();
     return Scaffold(
       body: Center(
         child: Column(
@@ -45,7 +68,18 @@ class _DashBoardState extends State<DashBoard> {
                       setState(() {
                         currentSliderValue = value;
                       });
-                    })
+                      double newwidth =
+                          (MediaQuery.of(context).size.width * 0.7) /
+                              currentSliderValue;
+                      double newmargin =
+                          (MediaQuery.of(context).size.width * 0.1) /
+                              currentSliderValue;
+                      fillArr(newwidth, newmargin);
+                    }),
+                RaisedButton(
+                  child: Text("Insertion Sort"),
+                  onPressed: InsertionSort,
+                ),
               ],
             ),
             Row(
