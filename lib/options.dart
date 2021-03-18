@@ -1,5 +1,6 @@
 import 'package:algolizer/dataStructures/DataStructures.dart';
 import 'package:algolizer/pathFinding/PathFinding.dart';
+import 'package:algolizer/sortingAlgorithms/Dashboard.dart';
 import 'package:algolizer/sortingAlgorithms/SortingAlgorithms.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class Options extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SortingAlgorithms()),
+                MaterialPageRoute(builder: (context) => DashBoard()),
               );
             },
             child: Text(
