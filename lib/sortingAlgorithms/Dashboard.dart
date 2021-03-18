@@ -10,6 +10,7 @@ class DashBoard extends StatefulWidget {
 class _DashBoardState extends State<DashBoard> {
   double currentSliderValue = 50;
   List<double> arr = new List(500);
+  List<Block> blockList;
 
   // Map<String, >
   void fillArr() {
@@ -22,6 +23,7 @@ class _DashBoardState extends State<DashBoard> {
       else
         arr[i] = val;
     }
+    blockList = [...arr.map((height) => Block(height))];
   }
 
   @override
@@ -49,7 +51,7 @@ class _DashBoardState extends State<DashBoard> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [...arr.map((height) => Block(height))],
+              children: [...blockList],
             ),
             // Row(
             //   children: [
