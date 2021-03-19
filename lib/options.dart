@@ -41,7 +41,10 @@ class Options extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DashBoard()),
+                MaterialPageRoute(
+                    builder: (context) => DashBoard(
+                        MediaQuery.of(context).size.width,
+                        MediaQuery.of(context).size.height)),
               );
             },
             child: Text(

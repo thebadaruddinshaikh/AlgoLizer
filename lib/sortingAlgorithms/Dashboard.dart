@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class DashBoard extends StatefulWidget {
+  double width;
+  double height;
+  DashBoard(@required this.width, @required this.height);
   @override
   _DashBoardState createState() => _DashBoardState();
 }
@@ -16,10 +19,12 @@ class _DashBoardState extends State<DashBoard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fillArr(8, 3);
+    fillArr((widget.width * 0.7) / 50, (widget.width * 0.1) / 50,
+        widget.height * 0.7);
   }
 
   void InsertionSort() async {
+    int delay = (pow(15, 4) / pow(currentSliderValue, 2)).round();
     for (int i = 1; i < currentSliderValue; i++) {
       if (blockList[i] == null) break;
       Block key = blockList[i];
@@ -28,7 +33,7 @@ class _DashBoardState extends State<DashBoard> {
         setState(() {
           blockList[j + 1] = blockList[j];
         });
-        await Future.delayed(Duration(microseconds: 5));
+        await Future.delayed(Duration(microseconds: delay));
         j--;
       }
       blockList[j + 1] = key;
@@ -36,12 +41,28 @@ class _DashBoardState extends State<DashBoard> {
     // for (Block b in blockList) print(b.height);
   }
 
+  void BubbleSort() async {
+    int delay = (pow(15, 4) / pow(currentSliderValue, 2)).round();
+    for (int i = 0; i < currentSliderValue - 1; i++) {
+      for (int j = 0; j < currentSliderValue - i - 1; j++) {
+        if (blockList[j].height > blockList[j + 1].height) {
+          Block temp = blockList[j + 1];
+          setState(() {
+            blockList[j + 1] = blockList[j];
+            blockList[j] = temp;
+          });
+          await Future.delayed(Duration(milliseconds: delay));
+        }
+      }
+    }
+  }
+
   // Map<String, >
-  void fillArr(double width, double margin) {
+  void fillArr(double width, double margin, double height) {
     for (int i = 0; i < arr.length; i++) arr[i] = null;
     var rng = new Random();
     for (int i = 0; i < currentSliderValue; i++) {
-      double val = rng.nextDouble() * 200;
+      double val = rng.nextDouble() * height;
       if (val == 0)
         continue;
       else
@@ -74,12 +95,20 @@ class _DashBoardState extends State<DashBoard> {
                       double newmargin =
                           (MediaQuery.of(context).size.width * 0.1) /
                               currentSliderValue;
-                      fillArr(newwidth, newmargin);
+
+                      fillArr(newwidth, newmargin, widget.height * 0.7);
                     }),
                 RaisedButton(
                   child: Text("Insertion Sort"),
                   onPressed: InsertionSort,
                 ),
+                RaisedButton(onPressed: BubbleSort, child: Text("Bubble Sort")),
+                RaisedButton(onPressed: () {}, child: Text("Merge Sort")),
+                RaisedButton(onPressed: () {}, child: Text("Quick Sort")),
+                RaisedButton(onPressed: () {}, child: Text("Counting Sort")),
+                RaisedButton(onPressed: () {}, child: Text("Radix Sort")),
+                RaisedButton(onPressed: () {}, child: Text("Selection Sort")),
+                RaisedButton(onPressed: () {}, child: Text("Heap Sort")),
               ],
             ),
             Row(
