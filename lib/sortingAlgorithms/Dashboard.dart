@@ -14,6 +14,7 @@ class _DashBoardState extends State<DashBoard> {
   double currentSliderValue = 50;
   List<double> arr = new List(500);
   List<Block> blockList;
+  bool running = false;
 
   @override
   void initState() {
@@ -24,6 +25,9 @@ class _DashBoardState extends State<DashBoard> {
   }
 
   void InsertionSort() async {
+    setState(() {
+      running = true;
+    });
     int delay = (pow(15, 4) / pow(currentSliderValue, 2)).round();
     for (int i = 1; i < currentSliderValue; i++) {
       if (blockList[i] == null) break;
@@ -33,15 +37,20 @@ class _DashBoardState extends State<DashBoard> {
         setState(() {
           blockList[j + 1] = blockList[j];
         });
-        await Future.delayed(Duration(microseconds: delay));
+        await Future.delayed(Duration(milliseconds: delay));
         j--;
       }
       blockList[j + 1] = key;
     }
-    // for (Block b in blockList) print(b.height);
+    setState(() {
+      running = false;
+    });
   }
 
   void BubbleSort() async {
+    setState(() {
+      running = true;
+    });
     int delay = (pow(15, 4) / pow(currentSliderValue, 2)).round();
     for (int i = 0; i < currentSliderValue - 1; i++) {
       for (int j = 0; j < currentSliderValue - i - 1; j++) {
@@ -55,6 +64,9 @@ class _DashBoardState extends State<DashBoard> {
         }
       }
     }
+    setState(() {
+      running = false;
+    });
   }
 
   // Map<String, >
@@ -79,37 +91,93 @@ class _DashBoardState extends State<DashBoard> {
           children: [
             SizedBox(height: 20),
             Row(
-              children: [
-                Text("Length"),
-                Slider(
-                    value: currentSliderValue,
-                    min: 5,
-                    max: 200,
-                    onChanged: (double value) {
-                      setState(() {
-                        currentSliderValue = value;
-                      });
-                      double newwidth =
-                          (MediaQuery.of(context).size.width * 0.7) /
-                              currentSliderValue;
-                      double newmargin =
-                          (MediaQuery.of(context).size.width * 0.1) /
-                              currentSliderValue;
+              children: (running)
+                  ? [
+                      Text(
+                        "Length",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      Slider(
+                          value: currentSliderValue,
+                          min: 5,
+                          max: 200,
+                          onChanged: null),
+                      RaisedButton(
+                        child: Text("Insertion Sort"),
+                        onPressed: null,
+                      ),
+                      RaisedButton(
+                          onPressed: null,
+                          child: Text(
+                            "Bubble Sort",
+                          )),
+                      RaisedButton(
+                          onPressed: null,
+                          child: Text(
+                            "Merge Sort",
+                          )),
+                      RaisedButton(
+                          onPressed: null,
+                          child: Text(
+                            "Quick Sort",
+                          )),
+                      RaisedButton(
+                          onPressed: null,
+                          child: Text(
+                            "Counting Sort",
+                          )),
+                      RaisedButton(
+                          onPressed: null,
+                          child: Text(
+                            "Radix Sort",
+                          )),
+                      RaisedButton(
+                          onPressed: null,
+                          child: Text(
+                            "Selection Sort",
+                          )),
+                      RaisedButton(
+                          onPressed: null,
+                          child: Text(
+                            "Heap Sort",
+                          )),
+                    ]
+                  : [
+                      Text(
+                        "Length",
+                      ),
+                      Slider(
+                          value: currentSliderValue,
+                          min: 5,
+                          max: 200,
+                          onChanged: (double value) {
+                            setState(() {
+                              currentSliderValue = value;
+                            });
+                            double newwidth =
+                                (MediaQuery.of(context).size.width * 0.7) /
+                                    currentSliderValue;
+                            double newmargin =
+                                (MediaQuery.of(context).size.width * 0.1) /
+                                    currentSliderValue;
 
-                      fillArr(newwidth, newmargin, widget.height * 0.7);
-                    }),
-                RaisedButton(
-                  child: Text("Insertion Sort"),
-                  onPressed: InsertionSort,
-                ),
-                RaisedButton(onPressed: BubbleSort, child: Text("Bubble Sort")),
-                RaisedButton(onPressed: () {}, child: Text("Merge Sort")),
-                RaisedButton(onPressed: () {}, child: Text("Quick Sort")),
-                RaisedButton(onPressed: () {}, child: Text("Counting Sort")),
-                RaisedButton(onPressed: () {}, child: Text("Radix Sort")),
-                RaisedButton(onPressed: () {}, child: Text("Selection Sort")),
-                RaisedButton(onPressed: () {}, child: Text("Heap Sort")),
-              ],
+                            fillArr(newwidth, newmargin, widget.height * 0.7);
+                          }),
+                      RaisedButton(
+                        child: Text("Insertion Sort"),
+                        onPressed: InsertionSort,
+                      ),
+                      RaisedButton(
+                          onPressed: BubbleSort, child: Text("Bubble Sort")),
+                      RaisedButton(onPressed: () {}, child: Text("Merge Sort")),
+                      RaisedButton(onPressed: () {}, child: Text("Quick Sort")),
+                      RaisedButton(
+                          onPressed: () {}, child: Text("Counting Sort")),
+                      RaisedButton(onPressed: () {}, child: Text("Radix Sort")),
+                      RaisedButton(
+                          onPressed: () {}, child: Text("Selection Sort")),
+                      RaisedButton(onPressed: () {}, child: Text("Heap Sort")),
+                    ],
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
