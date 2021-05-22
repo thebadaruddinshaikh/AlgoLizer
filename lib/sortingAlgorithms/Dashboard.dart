@@ -20,7 +20,7 @@ class _DashBoardState extends State<DashBoard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fillArr((widget.width * 0.7) / 50, (widget.width * 0.1) / 50,
+    fillArr((widget.width * 0.6) / 50, (widget.width * 0.1) / 50,
         widget.height * 0.7);
   }
 
@@ -67,6 +67,61 @@ class _DashBoardState extends State<DashBoard> {
     setState(() {
       running = false;
     });
+  }
+
+  void mSort(int l, int r) {
+    if (l < r) {
+      int mid = (l + (r - l) / 2).floor();
+      mSort(l, mid);
+      mSort(mid + 1, r);
+      merge(l, mid, r);
+    }
+  }
+
+  void merge(int l, int m, int r) {
+    // await Future.delayed(Duration(milliseconds: 1));
+    int delay = (pow(15, 4) / pow(currentSliderValue, 2)).round();
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    List<Block> L = new List(n1);
+    List<Block> R = new List(n2);
+
+    for (int i = 0; i < n1; i++) L[i] = blockList[l + i];
+    for (int i = 0; i < n2; i++) R[i] = blockList[m + 1 + i];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+      if (L[i].height <= R[j].height) {
+        setState(() {
+          blockList[k] = L[i];
+        });
+        // await Future.delayed(Duration(milliseconds: delay));
+        i++;
+      } else {
+        setState(() {
+          blockList[k] = R[j];
+        });
+        // await Future.delayed(Duration(milliseconds: delay));
+        j++;
+      }
+      k++;
+    }
+    while (i < n1) {
+      setState(() {
+        blockList[k] = L[i];
+      });
+      // await Future.delayed(Duration(milliseconds: delay));
+      i++;
+      k++;
+    }
+    while (j < n2) {
+      setState(() {
+        blockList[k] = R[j];
+      });
+      // await Future.delayed(Duration(milliseconds: delay));
+      j++;
+      k++;
+    }
   }
 
   // Map<String, >
@@ -155,7 +210,7 @@ class _DashBoardState extends State<DashBoard> {
                               currentSliderValue = value;
                             });
                             double newwidth =
-                                (MediaQuery.of(context).size.width * 0.7) /
+                                (MediaQuery.of(context).size.width * 0.6) /
                                     currentSliderValue;
                             double newmargin =
                                 (MediaQuery.of(context).size.width * 0.1) /
@@ -169,7 +224,11 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                       RaisedButton(
                           onPressed: BubbleSort, child: Text("Bubble Sort")),
-                      RaisedButton(onPressed: () {}, child: Text("Merge Sort")),
+                      RaisedButton(
+                          onPressed: () {
+                            mSort(0, blockList.length - 1);
+                          },
+                          child: Text("Merge Sort")),
                       RaisedButton(onPressed: () {}, child: Text("Quick Sort")),
                       RaisedButton(
                           onPressed: () {}, child: Text("Counting Sort")),
